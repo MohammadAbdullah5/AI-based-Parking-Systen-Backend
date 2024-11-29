@@ -6,7 +6,7 @@ const morgan = require("morgan");
 // Import routers
 const userRouter = require("./Routes/userRoutes");
 // Global error handler middleware
-const globalErrorHandler = require("./middlewares/globalErrorHandler");
+const globalErrorHandler = require("./Middlewares/globalErrorHandler");
 // const Review = require("./Models/Review");
 
 dotenv.config();

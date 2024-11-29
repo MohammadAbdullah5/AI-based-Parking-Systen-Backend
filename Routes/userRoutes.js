@@ -6,7 +6,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/add-vehicle', addVehicle);
 router.put('/update-vehicle', updateVehicle);
-router.delete('/delete-vehicle/:licensePlate', deleteVehicle);
+router.delete('/delete-vehicle', deleteVehicle);
 router.get('/view-vehicles', viewAllVehicles);
 router.get('/vehicle-details/:licensePlate', viewVehicleDetails);
 router.delete('/delete-admin', deleteAdmin);

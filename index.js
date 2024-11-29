@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 // Import routers
+const userRouter = require("./Routes/userRoutes");
 // Global error handler middleware
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 // const Review = require("./Models/Review");
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 // Set up routes
-
+app.use("/api/v1/users", userRouter);
 
 // Global error handler
 app.use(globalErrorHandler);

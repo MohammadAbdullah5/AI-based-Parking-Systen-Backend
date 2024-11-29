@@ -82,8 +82,8 @@ const addVehicle = async (req, res) => {
 // Update vehicle
 const updateVehicle = async (req, res) => {
     try {
-        const { licensePlate } = req.body;
-        const vehicle = await Vehicle.findOneAndUpdate({ licensePlate }, { ownerEmail }, { new: true });
+        const { licensePlate, ownerEmail } = req.body;
+        const vehicle = await Vehicle.findOneAndUpdate({ ownerEmail }, { licensePlate }, { new: true });
         if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
 
         return res.status(200).json({ message: 'Vehicle updated successfully' });

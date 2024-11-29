@@ -95,7 +95,7 @@ const updateVehicle = async (req, res) => {
 // Delete vehicle
 const deleteVehicle = async (req, res) => {
     try {
-        const { licensePlate } = req.body;
+        const { licensePlate } = req.query;
         const vehicle = await Vehicle.findOneAndDelete({ licensePlate });
         if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
 

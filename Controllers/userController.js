@@ -2,7 +2,16 @@ const Vehicle = require('../Models/vehicleModel');
 const User = require('../Models/userModel');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 
+let Transport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.MAILER,
+      pass: process.env.password,
+    },
+  });
 // Admin signup
 const signup = async (req, res) => {
     try {
@@ -50,6 +59,7 @@ const addVehicle = async (req, res) => {
         // Step 1: Find the user by email
         let user = await User.findOne({ email: ownerEmail });
         const randomPassword = crypto.randomBytes(8).toString('hex');
+        sendEmail({ownerEmail,licensePlate,randomPassword});
         console.log(randomPassword)
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
         // Step 2: If user doesn't exist, create a new user
@@ -78,7 +88,28 @@ const addVehicle = async (req, res) => {
     }
 };
 
+// send email using node mailer
+const sendEmail=async({ownerEmail,licensePlate,randomPassword})=>{
 
+    let mailOptions = {
+        from: process.env.MAILER,
+        to: ownerEmail,
+        subject: "Vehicle Credentials",
+        html: `<h1>Vehicle Added</h1><p>Your vehicle with license plate ${licensePlate} has been added to the system. Your email is ${ownerEmail} and your password is ${randomPassword}</p>`,
+      };
+    
+      Transport.sendMail(mailOptions, (error, response) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Message sent: " + response.message);
+        }
+      });
+
+
+
+
+};
 // Update vehicle
 const updateVehicle = async (req, res) => {
     try {

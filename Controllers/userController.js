@@ -89,27 +89,33 @@ const addVehicle = async (req, res) => {
 };
 
 // send email using node mailer
-const sendEmail=async({ownerEmail,licensePlate,randomPassword})=>{
-
-    let mailOptions = {
+const sendEmail = async ({ ownerEmail, licensePlate, randomPassword }) => {
+    try {
+  
+      
+      // Mail options
+      const mailOptions = {
         from: process.env.MAILER,
         to: ownerEmail,
         subject: "Vehicle Credentials",
-        html: `<h1>Vehicle Added</h1><p>Your vehicle with license plate ${licensePlate} has been added to the system. Your email is ${ownerEmail} and your password is ${randomPassword}</p>`,
+        html: `<h1>Vehicle Added</h1>
+               <p>Your vehicle with license plate <b>${licensePlate}</b> has been added to the system.</p>
+               <p>Your email is <b>${ownerEmail}</b> and your password is <b>${randomPassword}</b></p>`,
       };
-    
-      Transport.sendMail(mailOptions, (error, response) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Message sent: " + response.message);
-        }
-      });
-
-
-
-
-};
+  
+      // Send email
+      const response = await Transport.sendMail(mailOptions);
+      console.log("Message sent: " + response.messageId);
+  
+      // Return a success message
+      return { status: "success", message: "Email sent successfully" };
+    } catch (error) {
+      console.error("Error sending email:", error);
+  
+      // Return an error message
+      throw new Error("Failed to send email. Please try again.");
+    }
+  };
 // Update vehicle
 const updateVehicle = async (req, res) => {
     try {

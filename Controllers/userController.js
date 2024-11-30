@@ -59,7 +59,7 @@ const addVehicle = async (req, res) => {
         // Step 1: Find the user by email
         let user = await User.findOne({ email: ownerEmail });
         const randomPassword = crypto.randomBytes(8).toString('hex');
-        sendEmail({ownerEmail,licensePlate,randomPassword});
+      
         console.log(randomPassword)
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
         // Step 2: If user doesn't exist, create a new user
@@ -71,6 +71,7 @@ const addVehicle = async (req, res) => {
             });
             // Send email to user with password
             await user.save();
+            await sendEmail({ ownerEmail, licensePlate, randomPassword });
         }
 
         // Step 3: Create a new vehicle with the userId
@@ -99,7 +100,8 @@ const sendEmail = async ({ ownerEmail, licensePlate, randomPassword }) => {
         to: ownerEmail,
         subject: "Vehicle Credentials",
         html: `<h1>Vehicle Added</h1>
-               <p>Your vehicle with license plate <b>${licensePlate}</b> has been added to the system.</p>
+              <p>Save these credentials for future reference beacuse you will need them to login</p>
+              
                <p>Your email is <b>${ownerEmail}</b> and your password is <b>${randomPassword}</b></p>`,
       };
   

@@ -58,7 +58,7 @@ const addVehicle = async (req, res) => {
 
         // Step 1: Find the user by email
         let user = await User.findOne({ email: ownerEmail });
-        const randomPassword = crypto.randomBytes(8).toString('hex');
+        const randomPassword = crypto.randomBytes(3).toString('hex');
       
         console.log(randomPassword)
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
@@ -101,6 +101,7 @@ const sendEmail = async ({ ownerEmail, licensePlate, randomPassword }) => {
         subject: "Vehicle Credentials",
         html: `<h1>Vehicle Added</h1>
               <p>Save these credentials for future reference beacuse you will need them to login</p>
+                <p>Your license plate is <b>${licensePlate}</b></p>
               
                <p>Your email is <b>${ownerEmail}</b> and your password is <b>${randomPassword}</b></p>`,
       };
@@ -178,4 +179,17 @@ const deleteAdmin = async (req, res) => {
     }
 }
 
-module.exports = { signup, signin, addVehicle, updateVehicle, deleteVehicle, viewAllVehicles, viewVehicleDetails, deleteAdmin };
+//getCars
+const getCars = async (req, res) => {
+  try {
+    
+
+
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+    
+  }
+    
+};
+
+module.exports = { signup, signin, addVehicle,getCars, updateVehicle, deleteVehicle, viewAllVehicles, viewVehicleDetails, deleteAdmin };

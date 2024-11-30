@@ -169,8 +169,10 @@ const viewVehicleDetails = async (req, res) => {
 };
 
 const deleteAdmin = async (req, res) => {
+    console.log('delete admin');
     try {
-        const result = await User.findOneAndDelete({role: 'admin'})
+        console.log('delete admin');
+        const result = await User.findOneAndDelete({role: 'admin'});
         if (!result) return res.status(404).json({ message: 'Admin not found' });
         return res.status(200).json({ message: 'Admin deleted successfully' });
 
@@ -181,8 +183,14 @@ const deleteAdmin = async (req, res) => {
 
 //getCars
 const getCars = async (req, res) => {
+    console.log('get cars');
   try {
-    
+
+    const {id}=req.body;
+    console.log(id);
+    const result=await Vehicle.find({userId:id});
+    if (!result) return res.status(404).json({ message: 'Vehicle not found' });
+    return res.status(200).json({data:result});
 
 
   } catch (error) {

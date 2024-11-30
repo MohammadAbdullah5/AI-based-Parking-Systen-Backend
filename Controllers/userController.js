@@ -46,7 +46,7 @@ const signin = async (req, res) => {
                 ? 'Admin signed in successfully'
                 : 'Vehicle owner signed in successfully';
 
-        return res.status(200).json({ message, role: user.role });
+        return res.status(200).json({ _id: user._id, role: user.role, email: user.email });
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }

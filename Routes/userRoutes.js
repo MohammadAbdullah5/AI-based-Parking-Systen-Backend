@@ -1,6 +1,6 @@
 const express = require('express');
 const { signup, signin, addVehicle, updateVehicle, deleteVehicle, viewAllVehicles, viewVehicleDetails, deleteAdmin } = require('../Controllers/userController');
-const authorize = require('../middlewares/authorization')
+const authorize = require('../authorization')
 
 const router = express.Router();
 

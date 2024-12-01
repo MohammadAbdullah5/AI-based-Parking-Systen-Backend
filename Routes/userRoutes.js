@@ -1,14 +1,16 @@
 const express = require('express');
-const router = express.Router();
 const { signup, signin, addVehicle, updateVehicle, deleteVehicle, viewAllVehicles, viewVehicleDetails, deleteAdmin } = require('../Controllers/userController');
+const authorize = require('../middlewares/authorization')
+
+const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/signin', signin);
-router.post('/add-vehicle', addVehicle);
-router.put('/update-vehicle', updateVehicle);
-router.delete('/delete-vehicle', deleteVehicle);
-router.get('/view-vehicles', viewAllVehicles);
-router.get('/vehicle-details/:licensePlate', viewVehicleDetails);
-router.delete('/delete-admin', deleteAdmin);
+router.post('/add-vehicle', authorize(['admin']), addVehicle);
+router.put('/update-vehicle', authorize(['admin']), updateVehicle);
+router.delete('/delete-vehicle', authorize(['admin']), deleteVehicle);
+router.get('/view-vehicles', authorize(['admin']), viewAllVehicles);
+router.get('/vehicle-details/:licensePlate', authorize(['admin', 'owner']), viewVehicleDetails);
+router.delete('/delete-admin', authorize(['admin']), deleteAdmin);
 
 module.exports = router;

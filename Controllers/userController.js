@@ -2,6 +2,7 @@ const Vehicle = require('../Models/vehicleModel');
 const User = require('../Models/userModel');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken')
 
 // Admin signup
 const signup = async (req, res) => {
@@ -31,13 +32,19 @@ const signin = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
+        const t = jwt.sign(
+            { id: user._id, role: user.role }, // Payload
+            process.env.JWT_SECRET,           // Secret key
+            { expiresIn: '1d' }               // Token expiry
+        );
+
         // Determine user role and return appropriate message
         const message =
             user.role === 'admin'
                 ? 'Admin signed in successfully'
                 : 'Vehicle owner signed in successfully';
 
-        return res.status(200).json({ message, role: user.role });
+        return res.status(200).json({ _id: user._id, role: user.role, email: user.email, token: t });
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -119,6 +126,7 @@ const viewAllVehicles = async (req, res) => {
 const viewVehicleDetails = async (req, res) => {
     try {
         const { licensePlate } = req.params;
+        console.log(licensePlate)
         const vehicle = await Vehicle.findOne({ licensePlate }).populate('userId', 'email');;
         if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
 

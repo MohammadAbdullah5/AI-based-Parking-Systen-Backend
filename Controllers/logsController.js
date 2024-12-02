@@ -40,8 +40,8 @@ const getAllVehicleLogs = async (req, res) => {
 
 const getVehicleLogs = async (req, res) => {
     try {
-        const { vehicleId } = req.params;
-        const logs = await Logs.find({ vehicleId }).populate('vehicleId');
+        const { licensePlate } = req.params;
+        const logs = await Logs.find({ vehicleId: licensePlate }).populate('vehicleId');
         return res.status(200).json(logs);
     } catch (err) {
         return res.status(500).json({ message: err.message });
